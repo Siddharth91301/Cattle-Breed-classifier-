@@ -1,0 +1,41 @@
+# ============================================================
+# Cattle Breed Classifier - configuration
+# Edit this file to point at your data and tune training.
+# ============================================================
+
+data:
+  # Root folder that contains one sub-folder per breed, e.g.
+  #   data/Gir/img1.jpg, data/Sahiwal/img2.jpg ...
+  # On Kaggle this is usually /kaggle/input/<your-dataset-name>
+  # Your dataset already has train/ val/ test/ sub-folders, so point this at
+  # the folder that CONTAINS them and keep has_split: true.
+  data_dir: "data"
+  has_split: true
+  val_split: 0.15          # used only when has_split is false
+  test_split: 0.10         # used only when has_split is false
+  image_size: 224
+  num_workers: 2
+  seed: 42
+
+model:
+  # Any timm backbone works: resnet50, efficientnet_b0, convnext_tiny,
+  # vit_base_patch16_224, mobilenetv3_large_100 ...
+  backbone: "efficientnet_b0"
+  pretrained: true
+  dropout: 0.2
+
+train:
+  epochs: 25
+  batch_size: 32
+  lr: 0.0003
+  weight_decay: 0.0001
+  label_smoothing: 0.1
+  # Freeze the backbone for the first N epochs (train only the head),
+  # then unfreeze everything. Set to 0 to train end-to-end from the start.
+  freeze_epochs: 3
+  mixed_precision: true
+  early_stopping_patience: 6
+
+paths:
+  output_dir: "outputs"      # checkpoints, plots, label map go here
+  checkpoint_name: "best_model.pt"
